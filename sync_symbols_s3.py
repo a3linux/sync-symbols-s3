@@ -36,8 +36,12 @@ def sync(index_files, path, bucket):
             print 'running cmd: %s' % cmd
             for line in f:
                 sym_file = line.strip()
-                cmd = 'aws s3 cp %s s3://%s/%s' % (
-                    sym_file, bucket, sym_file)
+                if sym_file.endswith('.sym'):
+                    cmd = ('aws s3 cp --content-type text/plain'
+                           '%s s3://%s/%s') % (sym_file, bucket, sym_file)
+                else:
+                    cmd = 'aws s3 cp %s s3://%s/%s' % (
+                        sym_file, bucket, sym_file)
                 print 'running cmd: %s' % cmd
                 os.popen(cmd)
     os.chdir(cwd)
