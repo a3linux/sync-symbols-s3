@@ -23,7 +23,7 @@ function full_sync_s3 {
     for dir in $dirs; do
         pushd $TOP_DIR/$dir > /dev/null
         echo "Syncing $dir to $bucket"
-        flock -n /tmp/sync-symbols-s3.lock -c aws s3 sync . s3://$bucket/
+        flock -n /tmp/sync-symbols-s3-full.lock -c aws s3 sync . s3://$bucket/
         popd > /dev/null
     done
     wait
@@ -34,7 +34,7 @@ function quick_sync_s3 {
     bucket=$2
     for dir in $dirs; do
         echo "Syncing $dir to $bucket"
-        flock -n /tmp/sync-symbols-s3-full.lock -c ./sync_symbols_s3.py -p $TOP_DIR/$dir -b $bucket -f $dir.p &
+        flock -n /tmp/sync-symbols-s3.lock -c ./sync_symbols_s3.py -p $TOP_DIR/$dir -b $bucket -f $dir.p &
     done
     wait
 }
