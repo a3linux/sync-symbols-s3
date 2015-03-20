@@ -33,6 +33,10 @@ function quick_sync_s3 {
     dirs=$1
     bucket=$2
     for dir in $dirs; do
+        # XXX workaround for bug 1144865
+        if [ "$dir" == "symbols_b2g" ]; then
+            aws s3 sync libxul.so/ s3://$bucket/
+        fi
         echo "Syncing $dir to $bucket"
         ./sync_symbols_s3.py -p $TOP_DIR/$dir -b $bucket -f $dir.p &
     done
