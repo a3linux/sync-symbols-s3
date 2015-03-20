@@ -36,7 +36,9 @@ function quick_sync_s3 {
         # XXX workaround for bug 1144865
         if [ "$dir" == "symbols_b2g" ]; then
             pushed $TOP_DIR/$dir
-            time aws s3 sync libxul.so/ s3://$bucket/
+            find libxul.so/* -maxdepth 1 -type d -mtime -1 | while read f; do
+                time aws s3 cp $f/libxul.so.sym s3://$bucket/$f/libxul.so.sym
+            done
             popd
         fi
         echo "Syncing $dir to $bucket"
