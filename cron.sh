@@ -41,7 +41,7 @@ function quick_sync_s3 {
                 touch -t ${yesterday}0000 /tmp/bug1144865
             fi
             find libxul.so/* -maxdepth 1 -type d -newer /tmp/bug1144865 | while read f; do
-                time aws s3 cp $f/libxul.so.sym s3://$bucket/$f/libxul.so.sym
+                aws s3 cp $f/libxul.so.sym s3://$bucket/$f/libxul.so.sym
             done
             touch /tmp/bug1144865
             popd
